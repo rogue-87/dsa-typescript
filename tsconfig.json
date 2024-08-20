@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", // Use the latest ECMAScript features
+    "strict": true, // Enable all strict type-checking options
+    "moduleResolution": "node", // Resolve modules like Node.js does
+    "sourceMap": true, // Generate source maps for debugging
+    "outDir": "./dist", // Redirect output structure to the dist folder
+    "rootDir": "./src", // Specify the root directory of input files
+    "noImplicitAny": true, // Raise errors on expressions and declarations with an implied 'any' type
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
+    "resolveJsonModule": true, // Include modules imported with '.json' extension
+    "isolatedModules": true, // Ensure that each file can be safely transpiled without relying on other files
+    "declaration": true, // Generate corresponding '.d.ts' files
+    "declarationMap": true, // Create sourcemaps for d.ts files
+    "removeComments": true, // Remove comments in emitted files
+    "noUnusedLocals": true, // Report errors on unused locals
+    "noUnusedParameters": true, // Report errors on unused parameters
+    "noImplicitReturns": true, // Report errors for functions that don't explicitly return a value
+    "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statements
+    "baseUrl": "./src",
+    "paths": {
+      "@structures/*": [
+        "structures/*"
+      ]
+    }
+  }
+}
