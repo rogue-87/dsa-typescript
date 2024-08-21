@@ -30,17 +30,17 @@ export default class ArrayList<T> {
       this.data[this.data.length - 1] = value;
     }
     // value & index
-    // Validate index
-    else if (!this.isWithinBounds(index)) {
+    else if (this.isWithinBounds(index)) {
+      // I love slicing. Easier than for loops shenanigans.
+      // oh, higher space complexity, but at least it's faster, right?
+      this.data = [
+        ...this.data.slice(0, index),
+        value,
+        ...this.data.slice(index),
+      ];
+    } else {
       throw new Error("Index is out of bounds");
     }
-    // I love slicing. Easier than for loops shenanigans.
-    // oh, higher space complexity, but at least it's faster, right?
-    this.data = [
-      ...this.data.slice(0, index),
-      value,
-      ...this.data.slice(index),
-    ];
   }
 
   remove(): T;
@@ -48,8 +48,8 @@ export default class ArrayList<T> {
 
   public remove(index?: number): T {
     // No index
-    if (!index) {
-      this.data.pop();
+    if (typeof index === "undefined") {
+      return this.data.pop() as T;
     }
     // Index
     else if (this.isWithinBounds(index)) {
