@@ -1,6 +1,6 @@
 # Data Structures and Algorithms Roadmap
 
-### [roadmap](https://roadmap.sh/datastructures-and-algorithms)
+### [track roadmap progress](https://roadmap.sh/datastructures-and-algorithms)
 
 ## 1. Introduction
 

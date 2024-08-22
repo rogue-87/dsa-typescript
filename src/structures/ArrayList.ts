@@ -6,9 +6,9 @@ export default class ArrayList<T> {
   /**
    * @description ArrayList capacity
    */
-  public cap: number;
+  public size: number;
 
-  private isWithinBounds(index: number) {
+  private isWithinBounds(index: number): boolean {
     return (
       Number.isInteger(index) && index >= 0 && index <= this.data.length - 1
     );
@@ -53,16 +53,31 @@ export default class ArrayList<T> {
     }
     // Index
     else if (this.isWithinBounds(index)) {
-      const value = this.data[index];
-      this.data = [...this.data.slice(0, index), ...this.data.slice(index + 1)];
-      return value;
+      if (index === 0) {
+        const value = this.data[index];
+        this.data = [...this.data.slice(1)];
+        return value;
+      }
+      //
+      else if (index === this.data.length - 1) {
+        return this.data.pop() as T;
+      }
+      //
+      else {
+        const value = this.data[index];
+        this.data = [
+          ...this.data.slice(0, index),
+          ...this.data.slice(index + 1),
+        ];
+        return value;
+      }
     }
     throw new Error("Index is out of bounds");
   }
 
   public clear(): void {
     this.data = [];
-    this.cap = this.data.length;
+    this.size = this.data.length;
   }
 
   public get(index: number): T {
@@ -77,11 +92,11 @@ export default class ArrayList<T> {
     } else throw new Error(`${index} is out of bounds`);
   }
 
-  public getData() {
+  public getData(): T[] {
     return this.data;
   }
 
-  public isEmpty() {
+  public isEmpty(): boolean {
     return this.data.length === 0;
   }
 
@@ -101,18 +116,25 @@ export default class ArrayList<T> {
     return -1;
   }
 
-  // public sort(comparator: Function): void {}
+  // I'll do algorithms later. btw, the algorithm used by the Array sort function
+  // in js is known as timesort which is derived from mergesort & insertion sort.
+  // It's also used in other programming languages such as python and rust.
+  // guess it's very reliable and stable.
+  // more info: 'https://en.wikipedia.org/wiki/Timsort'
+  public sort(compareFn?: ((a: T, b: T) => number) | undefined): void {
+    this.data.sort(compareFn);
+  }
 
   constructor();
-  constructor(arg1?: T[]);
+  constructor(data?: T[]);
 
-  constructor(arg1?: T[]) {
-    if (Array.isArray(arg1)) {
-      this.data = arg1;
-      this.cap = this.data.length;
+  constructor(data?: T[]) {
+    if (Array.isArray(data)) {
+      this.data = data;
+      this.size = this.data.length;
     } else {
       this.data = [];
-      this.cap = 0;
+      this.size = 0;
     }
   }
 }
