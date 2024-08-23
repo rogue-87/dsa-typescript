@@ -1,13 +1,11 @@
 # Data Structures and Algorithms Roadmap
 
-### [track roadmap progress](https://roadmap.sh/datastructures-and-algorithms)
+### [track progress](https://roadmap.sh/datastructures-and-algorithms)
 
 ## 1. Introduction
 
 - **Understand the importance of DSA**
   - Why DSA is important for problem-solving and technical interviews.
-- **Learn a programming language** (if not already proficient)
-  - Recommended: Python, Java, C++, or TypeScript.
 
 ## 2. Complexity Analysis
 

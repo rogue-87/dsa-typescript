@@ -9,9 +9,7 @@ export default class ArrayList<T> {
   public size: number;
 
   private isWithinBounds(index: number): boolean {
-    return (
-      Number.isInteger(index) && index >= 0 && index <= this.data.length - 1
-    );
+    return Number.isInteger(index) && index >= 0 && index <= this.data.length - 1;
   }
 
   /**
@@ -33,11 +31,7 @@ export default class ArrayList<T> {
     else if (this.isWithinBounds(index)) {
       // I love slicing. Easier than for loops shenanigans.
       // oh, higher space complexity, but at least it's faster, right?
-      this.data = [
-        ...this.data.slice(0, index),
-        value,
-        ...this.data.slice(index),
-      ];
+      this.data = [...this.data.slice(0, index), value, ...this.data.slice(index)];
     } else {
       throw new Error("Index is out of bounds");
     }
@@ -65,10 +59,7 @@ export default class ArrayList<T> {
       //
       else {
         const value = this.data[index];
-        this.data = [
-          ...this.data.slice(0, index),
-          ...this.data.slice(index + 1),
-        ];
+        this.data = [...this.data.slice(0, index), ...this.data.slice(index + 1)];
         return value;
       }
     }

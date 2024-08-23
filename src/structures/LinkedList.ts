@@ -13,9 +13,11 @@ class Node<T> {
 export default class LinkedList<T> {
   private head: Node<T> | null = null;
   private tail: Node<T> | null = null;
+  private size: number = 0;
 
   append(data: T): void {
     const newNode = new Node(data);
+    this.size++;
     if (this.tail) {
       this.tail.next = newNode;
       newNode.prev = this.tail;
@@ -28,6 +30,7 @@ export default class LinkedList<T> {
 
   prepend(data: T): void {
     const newNode = new Node(data);
+    this.size++;
     if (this.head) {
       newNode.next = this.head;
       this.head.prev = newNode;
@@ -38,12 +41,15 @@ export default class LinkedList<T> {
     }
   }
 
+  private insertAtHead(): void {}
+  private insertAtTail(): void {}
+  private insertInMiddle(): void {}
+
   insert(data: T, index: number, placement?: "before" | "after"): void {
-    if (!Number.isInteger(index) || index < 0) {
-      throw new Error("Index must be a non-negative integer.");
-    }
+    if (!Number.isInteger(index) || index < 0) throw new Error("Index must be a non-negative integer.");
 
     const newNode = new Node<T>(data);
+    this.size++;
 
     if (index === 0) {
       if (this.head) {
@@ -108,6 +114,58 @@ export default class LinkedList<T> {
     }
   }
 
+  remove(index: number): T {
+    if (!(Number.isInteger(index) && index >= 0 && index < this.size)) throw new Error("Index is out of bounds");
+    if (this.head === null && this.tail === null) throw new Error("There are no elements to remove");
+
+    this.size--;
+    if (index === 0) {
+      // in case there's only one element in the list.
+      if (this.head && this.head.next === null) {
+        let temp = this.head.data;
+        this.head = null;
+        this.tail = null;
+        return temp;
+      }
+      // in case there's more than one element in the list.
+      if (this.head && this.head.next) {
+        let temp = this.head;
+        this.head = this.head.next;
+        temp.next = null;
+        this.head.prev = null;
+        return temp.data;
+      }
+    }
+
+    let leader = this.head;
+    let count = 0;
+    while (leader && count < index) {
+      leader = leader.next;
+      count++;
+    }
+
+    // Remove the node (current)
+    if (leader) {
+      const removedData = leader.data;
+
+      // Update the previous node's next pointer
+      if (leader.prev) leader.prev.next = leader.next;
+
+      // Update the next node's previous pointer
+      if (leader.next) leader.next.prev = leader.prev;
+
+      // If it's the tail, update the tail pointer
+      if (leader === this.tail) this.tail = leader.prev;
+
+      // Clear the removed node's pointers
+      leader.next = null;
+      leader.prev = null;
+
+      return removedData;
+    }
+    throw new Error("Index is out of bounds");
+  }
+
   forEach(callback: (data: T) => void): void {
     let currentPtr = this.head;
     while (currentPtr) {
@@ -116,6 +174,9 @@ export default class LinkedList<T> {
     }
   }
 
+  getSize() {
+    return this.size;
+  }
   constructor();
   constructor(node: Node<T>);
 
@@ -123,6 +184,7 @@ export default class LinkedList<T> {
     if (node) {
       this.head = node;
       this.tail = node;
+      this.size++;
     }
   }
 }
