@@ -41,10 +41,6 @@ export default class LinkedList<T> {
     }
   }
 
-  private insertAtHead(): void {}
-  private insertAtTail(): void {}
-  private insertInMiddle(): void {}
-
   insert(data: T, index: number, placement?: "before" | "after"): void {
     if (!Number.isInteger(index) || index < 0) throw new Error("Index must be a non-negative integer.");
 
@@ -146,7 +142,7 @@ export default class LinkedList<T> {
 
     // Remove the node (current)
     if (leader) {
-      const removedData = leader.data;
+      const temp = leader.data;
 
       // Update the previous node's next pointer
       if (leader.prev) leader.prev.next = leader.next;
@@ -161,7 +157,7 @@ export default class LinkedList<T> {
       leader.next = null;
       leader.prev = null;
 
-      return removedData;
+      return temp;
     }
     throw new Error("Index is out of bounds");
   }
