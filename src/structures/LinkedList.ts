@@ -41,72 +41,63 @@ export default class LinkedList<T> {
     }
   }
 
-  insert(data: T, index: number, placement?: "before" | "after"): void {
-    if (!Number.isInteger(index) || index < 0) throw new Error("Index must be a non-negative integer.");
+  insert(data: T, index: number, placement: "before" | "after" = "before"): void {
+    if (!(Number.isInteger(index) && index >= 0 && index <= this.size)) {
+      throw new Error("Index must be a non-negative integer within bounds.");
+    }
 
-    const newNode = new Node<T>(data);
-    this.size++;
+    const newNode = new Node(data);
 
+    // insert at the head
     if (index === 0) {
-      if (this.head) {
-        switch (placement) {
-          case "before":
-            this.prepend(data);
-            break;
-          case "after":
-            if (this.head.next) {
-              newNode.next = this.head.next;
-              this.head.next.prev = newNode;
-              this.head.next = newNode;
-              newNode.prev = this.head;
-            } else this.append(data);
-            break;
-          default:
-            this.prepend(data);
-            break;
-        }
+      // insert after the head
+      if (this.head && placement === "after" && this.head.next) {
+        this.size++;
+        newNode.next = this.head.next;
+        this.head.next.prev = newNode;
+        this.head.next = newNode;
+        newNode.prev = this.head;
+      }
+      // insert before the head(same as the prepend function)
+      else {
+        this.prepend(data);
+      }
+      return;
+    }
+
+    // insert after the tail(same as the append function)
+    if (index === this.size - 1 && placement === "after") {
+      this.append(data);
+      return;
+    }
+
+    // figure out the index
+    let leader = this.head;
+    let count = 0;
+    while (leader && count < index) {
+      leader = leader.next;
+      count++;
+    }
+
+    // if leader is alive :p
+    if (leader) {
+      if (placement === "before") {
+        this.size++;
+        newNode.next = leader;
+        newNode.prev = leader.prev;
+        if (leader.prev) leader.prev.next = newNode;
+        leader.prev = newNode;
+        if (index === 0) this.head = newNode;
       } else {
-        this.head = newNode;
-        this.tail = newNode;
+        this.size++;
+        newNode.prev = leader;
+        newNode.next = leader.next;
+        if (leader.next) leader.next.prev = newNode;
+        leader.next = newNode;
+        if (index === this.size - 1) this.tail = newNode;
       }
     } else {
-      let leader: Node<T> | null = this.head;
-      let count = 0;
-      while (leader) {
-        if (count === index) {
-          switch (placement) {
-            case "before":
-              newNode.next = leader;
-              newNode.prev = leader.prev;
-              leader.prev!.next = newNode;
-              leader.prev = newNode;
-              break;
-            case "after":
-              if (leader === this.tail) {
-                this.append(data);
-              } else {
-                newNode.prev = leader;
-                newNode.next = leader.next;
-                leader.next!.prev = newNode;
-                leader.next = newNode;
-              }
-              break;
-            default:
-              newNode.next = leader;
-              newNode.prev = leader.prev;
-              leader.prev!.next = newNode;
-              leader.prev = newNode;
-              break;
-          }
-          return;
-        } else {
-          count++;
-          leader = leader.next;
-        }
-      }
-      if (index >= count) {
-        this.append(data);
-      }
+      throw new Error("Index out of bounds");
     }
   }
 
@@ -183,4 +174,59 @@ export default class LinkedList<T> {
       this.size++;
     }
   }
+}
+
+import getRandomInt from "../utils/generateRandomInt.js";
+import readline from "readline";
+export function stressTest() {
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+
+  const ls = new LinkedList<number>();
+
+  console.time("appending");
+  for (let i = 1; i <= 50; i++) {
+    ls.prepend(i);
+  }
+  console.timeEnd("appending");
+
+  console.time("prepending");
+  for (let i = 1; i <= 50; i++) {
+    ls.append(i);
+  }
+  console.timeEnd("prepending");
+
+  console.time("inserting");
+  for (let i = 1; i <= 100; i++) {
+    ls.insert(500, getRandomInt(1, 100) - 1, "after");
+  }
+  for (let i = 1; i <= 100; i++) {
+    ls.insert(500, getRandomInt(1, 100) - 1, "before");
+  }
+  for (let i = 1; i <= 100; i++) {
+    ls.insert(500, getRandomInt(1, 100) - 1);
+  }
+  console.timeEnd("inserting");
+
+  console.log();
+
+  console.log("============================== Structure ==============================");
+  console.log(ls);
+  console.log("=======================================================================");
+
+  console.log();
+
+  rl.question("Do you want to print out all entries? ('yes' | 'No'): ", (answer: "yes" | "no" | string) => {
+    if (answer === "yes") {
+      console.log("Printing out entries");
+      console.log("=============================== Entries ===============================");
+      ls.forEach((data) => {
+        console.log(data);
+      });
+      console.log("=======================================================================");
+    } else {
+      console.log("aborting");
+    }
+    console.log("Test ended");
+    rl.close();
+  });
 }

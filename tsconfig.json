@@ -1,28 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ES6",
-    "strict": true,
-    "moduleResolution": "node",
+    /* Base Options */
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "sourceMap": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "noImplicitAny": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "declaration": true,
-    "declarationMap": true,
-    "removeComments": true,
+    "outDir": "dist",
+    /* Strictness */
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": "./src",
-    "paths": {
-      "@structures/*": [
-        "structures/*"
-      ]
-    }
-  }
+    "noImplicitAny": true,
+  },
+  "include": [
+    "src/**/*"
+  ]
 }

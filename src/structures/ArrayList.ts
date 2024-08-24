@@ -129,3 +129,14 @@ export default class ArrayList<T> {
     }
   }
 }
+
+export function stressTest() {
+  const arrayList = new ArrayList<number>([2, 5, 1, 8, 5, 9, 3, 1]);
+  console.log(arrayList.getData());
+  arrayList.sort((a, b) => a - b);
+  console.log(arrayList.getData());
+
+  console.log(arrayList.get(3));
+  arrayList.set(3, 4);
+  console.log(arrayList.get(3));
+}
