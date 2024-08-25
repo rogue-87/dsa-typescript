@@ -153,17 +153,105 @@ export default class LinkedList<T> {
     throw new Error("Index is out of bounds");
   }
 
-  forEach(callback: (data: T) => void): void {
-    let currentPtr = this.head;
-    while (currentPtr) {
-      callback(currentPtr.data);
-      currentPtr = currentPtr.next;
+  get(index: number): T {
+    if (!isWithinBounds(index, this.size)) throw new Error("Index is out of bounds");
+    if (!this.head) throw new Error("The list is empty");
+    let leader = this.head;
+    let count = 0;
+    for (let i = 0; i < this.size; i++) {
+      if (count === index) return leader.data;
+
+      if (leader.next) leader = leader.next;
+      count++;
     }
+    throw new Error("Index is out of bounds");
   }
 
   getSize() {
     return this.size;
   }
+
+  indexOf(value: T): number | undefined {
+    if (!this.head) throw new Error("The list is empty");
+    let leader = this.head;
+    let count = 0;
+    for (let i = 0; i < this.size; i++) {
+      if (leader.data === value) return count;
+
+      if (leader.next) leader = leader.next;
+      count++;
+    }
+    console.error(`The element: ${value} is not in the linked list.`);
+    return undefined;
+  }
+
+  contains(value: T): boolean {
+    if (!this.head) throw new Error("The list is empty");
+    let leader = this.head;
+    let count = 0;
+    for (let i = 0; i < this.size; i++) {
+      if (leader.data === value) return true;
+
+      if (leader.next) leader = leader.next;
+      count++;
+    }
+    return false;
+  }
+
+  isEmpty(): boolean {
+    if (this.size === 0 && this.head === null) return true;
+    return false;
+  }
+
+  clear(): void {
+    this.head = null;
+    this.tail = null;
+  }
+
+  toArray(): T[] {
+    if (!this.head) return [];
+    let leader = this.head;
+    const array = new Array<T>();
+    for (let i = 0; i < this.size; i++) {
+      array.push(leader.data);
+    }
+    return array;
+  }
+
+  reverse(): void {
+    let leader = this.head;
+    let follower = null;
+
+    while (leader !== null) {
+      follower = leader.prev;
+      leader.prev = leader.next;
+      leader.next = follower;
+      leader = leader.prev;
+    }
+
+    if (follower != null) {
+      this.head = follower.prev;
+    }
+  }
+
+  getHead(): Node<T> {
+    if (!this.head) throw new Error("The list is empty");
+    return this.head;
+  }
+
+  getTail(): Node<T> {
+    if (!this.tail) throw new Error("The list is empty");
+    return this.tail;
+  }
+
+  forEach(callback: (data: T) => void): void {
+    let leader = this.head;
+    while (leader) {
+      callback(leader.data);
+      leader = leader.next;
+    }
+  }
+
   constructor();
   constructor(node: Node<T>);
 
@@ -176,34 +264,35 @@ export default class LinkedList<T> {
   }
 }
 
-import getRandomInt from "../utils/generateRandomInt.js";
-import readline from "readline";
+import { getRandomInt, isWithinBounds } from "../utils.js";
+import readline from "node:readline";
 export function stressTest() {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
   const ls = new LinkedList<number>();
+  const intensity = 1000000;
 
   console.time("appending");
-  for (let i = 1; i <= 50; i++) {
+  for (let i = 1; i <= intensity; i++) {
     ls.prepend(i);
   }
   console.timeEnd("appending");
 
   console.time("prepending");
-  for (let i = 1; i <= 50; i++) {
+  for (let i = 1; i <= intensity; i++) {
     ls.append(i);
   }
   console.timeEnd("prepending");
 
   console.time("inserting");
-  for (let i = 1; i <= 100; i++) {
-    ls.insert(500, getRandomInt(1, 100) - 1, "after");
+  for (let i = 1; i <= intensity; i++) {
+    ls.insert(i, getRandomInt(1, 100) - 1, "after");
   }
-  for (let i = 1; i <= 100; i++) {
-    ls.insert(500, getRandomInt(1, 100) - 1, "before");
+  for (let i = 1; i <= intensity; i++) {
+    ls.insert(i, getRandomInt(1, 100) - 1, "before");
   }
-  for (let i = 1; i <= 100; i++) {
-    ls.insert(500, getRandomInt(1, 100) - 1);
+  for (let i = 1; i <= intensity; i++) {
+    ls.insert(i, getRandomInt(1, 100) - 1);
   }
   console.timeEnd("inserting");
 

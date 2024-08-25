@@ -1,3 +1,5 @@
+import { isWithinBounds } from "../utils.js";
+
 export default class ArrayList<T> {
   /**
    * @description ArrayList data entries
@@ -7,10 +9,6 @@ export default class ArrayList<T> {
    * @description ArrayList capacity
    */
   public size: number;
-
-  private isWithinBounds(index: number): boolean {
-    return Number.isInteger(index) && index >= 0 && index <= this.data.length - 1;
-  }
 
   /**
    * @description adds an element to the end of the list.
@@ -28,7 +26,7 @@ export default class ArrayList<T> {
       this.data[this.data.length - 1] = value;
     }
     // value & index
-    else if (this.isWithinBounds(index)) {
+    else if (isWithinBounds(index, this.size)) {
       // I love slicing. Easier than for loops shenanigans.
       // oh, higher space complexity, but at least it's faster, right?
       this.data = [...this.data.slice(0, index), value, ...this.data.slice(index)];
@@ -46,7 +44,7 @@ export default class ArrayList<T> {
       return this.data.pop() as T;
     }
     // Index
-    else if (this.isWithinBounds(index)) {
+    else if (isWithinBounds(index, this.size)) {
       if (index === 0) {
         const value = this.data[index];
         this.data = [...this.data.slice(1)];
@@ -72,13 +70,13 @@ export default class ArrayList<T> {
   }
 
   public get(index: number): T {
-    if (this.isWithinBounds(index)) {
+    if (isWithinBounds(index, this.size)) {
       return this.data[index];
     } else throw new Error(`${index} is out of bounds or not an integer`);
   }
 
   public set(index: number, value: T): void {
-    if (this.isWithinBounds(index)) {
+    if (isWithinBounds(index, this.size)) {
       this.data[index] = value;
     } else throw new Error(`${index} is out of bounds`);
   }

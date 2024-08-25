@@ -5,9 +5,10 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf ./dist/* && tsc",
     "start": "node ./dist/main.js",
-    "dev": "tsc -w & nodemon dist/main.js"
+    "test": "pnpm run build && pnpm run start",
+    "dev": "rm-rf ./dist/* && tsc -w & nodemon dist/main.js"
   },
   "keywords": [],
   "author": "",
