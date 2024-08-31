@@ -1,18 +1,11 @@
-import LinkedList from "./structures/LinkedList.js";
+import { Stack } from "./structures/Stacks.js";
 
-const ls = new LinkedList<number>();
-/* for (let index = 0; index < 10; index++) {
-  ls.append(index);
-} */
+const st = new Stack<number>();
 
-ls.reverse();
+st.push(2);
 
-ls.forEach((data) => {
+st.forEach((data) => {
   console.log(data);
 });
 
-ls.reverse();
-
-ls.forEach((data) => {
-  console.log(data);
-});
+console.log(st);

@@ -8,15 +8,24 @@ export default class ArrayList<T> {
   /**
    * @description ArrayList capacity
    */
-  public size: number;
+  private size: number;
 
-  /**
-   * @description adds an element to the end of the list.
-   */
+  constructor();
+  constructor(data?: T[]);
+
+  constructor(data?: T[]) {
+    if (Array.isArray(data)) {
+      this.data = data;
+      this.size = this.data.length;
+    } else {
+      this.data = [];
+      this.size = 0;
+    }
+  }
+
+  // adds an element to the end of the list.
   add(value: T): void;
-  /**
-   * @description inserts an element to the list.
-   */
+  // description inserts an element to the list.
   add(value: T, index?: number): void;
 
   public add(value: T, index?: number): void {
@@ -114,17 +123,8 @@ export default class ArrayList<T> {
     this.data.sort(compareFn);
   }
 
-  constructor();
-  constructor(data?: T[]);
-
-  constructor(data?: T[]) {
-    if (Array.isArray(data)) {
-      this.data = data;
-      this.size = this.data.length;
-    } else {
-      this.data = [];
-      this.size = 0;
-    }
+  public getSize() {
+    return this.size;
   }
 }
 

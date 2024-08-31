@@ -199,8 +199,7 @@ export default class LinkedList<T> {
   }
 
   isEmpty(): boolean {
-    if (this.size === 0 && this.head === null) return true;
-    return false;
+    return this.size === 0;
   }
 
   clear(): void {
